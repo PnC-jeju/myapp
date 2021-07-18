@@ -1,0 +1,153 @@
+00:00 git:wrapper
+      01 mkdir -p /tmp
+    ✔ 01 deploy@3.34.94.252 0.090s
+      Uploading /tmp/git-ssh-fa6eb98d6cfcc770bd05.sh 100.0%
+      02 chmod 700 /tmp/git-ssh-fa6eb98d6cfcc770bd05.sh
+    ✔ 02 deploy@3.34.94.252 0.055s
+00:00 git:check
+      01 git ls-remote git@github.com:PnC-jeju/myapp.git HEAD
+      01 98814d694dbcf545b7799623f3d0f83207f0f125	HEAD
+    ✔ 01 deploy@3.34.94.252 2.849s
+00:03 deploy:check:directories
+      01 mkdir -p /home/deploy/myapp/shared /home/deploy/myapp/releases
+    ✔ 01 deploy@3.34.94.252 0.047s
+00:03 deploy:check:linked_dirs
+      01 mkdir -p /home/deploy/myapp/shared/log /home/deploy/myapp/shared/tmp/pids /home/deploy/myapp/shared/tmp/cache /home/deploy/myapp/shared/tmp/sockets /home/deploy/myapp/shared/vendor/bundle /home/deploy/myapp/shared/.bundle /home/deploy/myapp/shared/public/system /home/deploy/myapp/shared/public/uploads /home/deploy/myapp/shared/public/assets
+    ✔ 01 deploy@3.34.94.252 0.112s
+00:03 git:clone
+      The repository mirror is at /home/deploy/myapp/repo
+00:03 git:update
+      01 git remote set-url origin git@github.com:PnC-jeju/myapp.git
+    ✔ 01 deploy@3.34.94.252 0.055s
+      02 git remote update --prune
+      02 Fetching origin
+    ✔ 02 deploy@3.34.94.252 2.644s
+00:06 git:create_release
+      01 mkdir -p /home/deploy/myapp/releases/20210718035204
+    ✔ 01 deploy@3.34.94.252 0.093s
+      02 git archive main | /usr/bin/env tar -x -f - -C /home/deploy/myapp/releases/20210718035204
+    ✔ 02 deploy@3.34.94.252 0.068s
+00:06 deploy:set_current_revision
+      01 echo "98814d694dbcf545b7799623f3d0f83207f0f125" > REVISION
+    ✔ 01 deploy@3.34.94.252 0.049s
+00:06 deploy:symlink:linked_dirs
+      01 mkdir -p /home/deploy/myapp/releases/20210718035204 /home/deploy/myapp/releases/20210718035204/tmp /home/deploy/myapp/releases/20210718035204/vendor /home/deploy/myapp/releases/20210718035204/public
+    ✔ 01 deploy@3.34.94.252 0.091s
+      02 rm -rf /home/deploy/myapp/releases/20210718035204/log
+    ✔ 02 deploy@3.34.94.252 0.052s
+      03 ln -s /home/deploy/myapp/shared/log /home/deploy/myapp/releases/20210718035204/log
+    ✔ 03 deploy@3.34.94.252 0.091s
+      04 rm -rf /home/deploy/myapp/releases/20210718035204/tmp/pids
+    ✔ 04 deploy@3.34.94.252 0.048s
+      05 ln -s /home/deploy/myapp/shared/tmp/pids /home/deploy/myapp/releases/20210718035204/tmp/pids
+    ✔ 05 deploy@3.34.94.252 0.089s
+      06 ln -s /home/deploy/myapp/shared/tmp/cache /home/deploy/myapp/releases/20210718035204/tmp/cache
+    ✔ 06 deploy@3.34.94.252 0.050s
+      07 ln -s /home/deploy/myapp/shared/tmp/sockets /home/deploy/myapp/releases/20210718035204/tmp/sockets
+    ✔ 07 deploy@3.34.94.252 0.098s
+      08 ln -s /home/deploy/myapp/shared/vendor/bundle /home/deploy/myapp/releases/20210718035204/vendor/bundle
+    ✔ 08 deploy@3.34.94.252 0.056s
+      09 ln -s /home/deploy/myapp/shared/.bundle /home/deploy/myapp/releases/20210718035204/.bundle
+    ✔ 09 deploy@3.34.94.252 0.090s
+      10 ln -s /home/deploy/myapp/shared/public/system /home/deploy/myapp/releases/20210718035204/public/system
+    ✔ 10 deploy@3.34.94.252 0.055s
+      11 ln -s /home/deploy/myapp/shared/public/uploads /home/deploy/myapp/releases/20210718035204/public/uploads
+    ✔ 11 deploy@3.34.94.252 0.090s
+      12 ln -s /home/deploy/myapp/shared/public/assets /home/deploy/myapp/releases/20210718035204/public/assets
+    ✔ 12 deploy@3.34.94.252 0.054s
+00:09 bundler:config
+      01 $HOME/.rbenv/bin/rbenv exec bundle config --local deployment true
+    ✔ 01 deploy@3.34.94.252 0.310s
+      02 $HOME/.rbenv/bin/rbenv exec bundle config --local path /home/deploy/myapp/shared/bundle
+    ✔ 02 deploy@3.34.94.252 0.408s
+      03 $HOME/.rbenv/bin/rbenv exec bundle config --local without development:test
+    ✔ 03 deploy@3.34.94.252 0.307s
+00:10 bundler:install
+      The Gemfile's dependencies are satisfied, skipping installation
+00:10 deploy:assets:precompile
+      01 $HOME/.rbenv/bin/rbenv exec bundle exec rake assets:precompile
+      01 yarn install v1.22.5
+      01 [1/4] Resolving packages...
+      01 [2/4] Fetching packages...
+      01 info fsevents@2.3.2: The platform "linux" is incompatible with this module.
+      01 info "fsevents@2.3.2" is an optional dependency and failed compatibility check. Excluding it from installation.
+      01 info fsevents@1.2.13: The platform "linux" is incompatible with this module.
+      01 info "fsevents@1.2.13" is an optional dependency and failed compatibility check. Excluding it from installation.
+      01 [3/4] Linking dependencies...
+      01 [4/4] Building fresh packages...
+      01 Done in 9.78s.
+      01 Compiling...
+      01 Compiled all packs in /home/deploy/myapp/releases/20210718035204/public/packs
+      01 Though the "loose" option was set to "false" in your @babel/preset-env config, it will not be used for @babel/plugin-proposal-private-methods since the "loose" mode option was set to "true" for @babel/plugin-proposal-class-properties.
+      01 The "loose" option must be the same for @babel/plugin-proposal-class-properties, @babel/plugin-proposal-private-methods and @babel/plugin-proposal-private-property-in-object (when they are enabled): you can silence this warning by explicitly adding
+      01 	["@babel/plugin-proposal-private-methods", { "loose": true }]
+      01 to the "plugins" section of your Babel config.
+      01 Though the "loose" option was set to "false" in your @babel/preset-env config, it will not be used for @babel/plugin-proposal-private-methods since the "loose" mode option was set to "true" for @babel/plugin-proposal-class-properties.
+      01 The "loose" option must be the same for @babel/plugin-proposal-class-properties, @babel/plugin-proposal-private-methods and @babel/plugin-proposal-private-property-in-object (when they are enabled): you can silence this warning by explicitly adding
+      01 	["@babel/plugin-proposal-private-methods", { "loose": true }]
+      01 to the "plugins" section of your Babel config.
+      01 Though the "loose" option was set to "false" in your @babel/preset-env config, it will not be used for @babel/plugin-proposal-private-methods since the "loose" mode option was set to "true" for @babel/plugin-proposal-class-properties.
+      01 The "loose" option must be the same for @babel/plugin-proposal-class-properties, @babel/plugin-proposal-private-methods and @babel/plugin-proposal-private-property-in-object (when they are enabled): you can silence this warning by explicitly adding
+      01 	["@babel/plugin-proposal-private-methods", { "loose": true }]
+      01 to the "plugins" section of your Babel config.
+      01 Though the "loose" option was set to "false" in your @babel/preset-env config, it will not be used for @babel/plugin-proposal-private-methods since the "loose" mode option was set to "true" for @babel/plugin-proposal-class-properties.
+      01 The "loose" option must be the same for @babel/plugin-proposal-class-properties, @babel/plugin-proposal-private-methods and @babel/plugin-proposal-private-property-in-object (when they are enabled): you can silence this warning by explicitly adding
+      01 	["@babel/plugin-proposal-private-methods", { "loose": true }]
+      01 to the "plugins" section of your Babel config.
+      01 Though the "loose" option was set to "false" in your @babel/preset-env config, it will not be used for @babel/plugin-proposal-private-methods since the "loose" mode option was set to "true" for @babel/plugin-proposal-class-properties.
+      01 The "loose" option must be the same for @babel/plugin-proposal-class-properties, @babel/plugin-proposal-private-methods and @babel/plugin-proposal-private-property-in-object (when they are enabled): you can silence this warning by explicitly adding
+      01 	["@babel/plugin-proposal-private-methods", { "loose": true }]
+      01 to the "plugins" section of your Babel config.
+      01 Though the "loose" option was set to "false" in your @babel/preset-env config, it will not be used for @babel/plugin-proposal-private-methods since the "loose" mode option was set to "true" for @babel/plugin-proposal-class-properties.
+      01 The "loose" option must be the same for @babel/plugin-proposal-class-properties, @babel/plugin-proposal-private-methods and @babel/plugin-proposal-private-property-in-object (when they are enabled): you can silence this warning by explicitly adding
+      01 	["@babel/plugin-proposal-private-methods", { "loose": true }]
+      01 to the "plugins" section of your Babel config.
+      01 
+      01 Hash: e4cb1aa40fed2663ee2c
+      01 Version: webpack 4.46.0
+      01 Time: 6374ms
+      01 Built at: 07/18/2021 3:52:32 AM
+      01                                         Asset       Size  Chunks                         Chunk Names
+      01        js/application-c3e3aae48c4c321181e9.js   69.4 KiB       0  [emitted] [immutable]  application
+      01     js/application-c3e3aae48c4c321181e9.js.br   15.4 KiB          [emitted]              
+      01     js/application-c3e3aae48c4c321181e9.js.gz   17.8 KiB          [emitted]              
+      01    js/application-c3e3aae48c4c321181e9.js.map    205 KiB       0  [emitted] [dev]        application
+      01 js/application-c3e3aae48c4c321181e9.js.map.br   43.8 KiB          [emitted]              
+      01 js/application-c3e3aae48c4c321181e9.js.map.gz   50.9 KiB          [emitted]              
+      01                                 manifest.json  364 bytes          [emitted]              
+      01                              manifest.json.br  133 bytes          [emitted]              
+      01                              manifest.json.gz  142 bytes          [emitted]              
+      01 Entrypoint application = js/application-c3e3aae48c4c321181e9.js js/application-c3e3aae48c4c321181e9.js.map
+      01 [0] (webpack)/buildin/module.js 552 bytes {0} [built]
+      01 [4] ./app/javascript/packs/application.js 480 bytes {0} [built]
+      01 [5] ./app/javascript/channels/index.js 205 bytes {0} [built]
+      01 [6] ./app/javascript/channels sync _channel\.js$ 160 bytes {0} [built]
+      01     + 3 hidden modules
+      01 
+    ✔ 01 deploy@3.34.94.252 20.901s
+00:31 deploy:assets:backup_manifest
+      01 mkdir -p /home/deploy/myapp/releases/20210718035204/assets_manifest_backup
+    ✔ 01 deploy@3.34.94.252 0.053s
+      02 cp /home/deploy/myapp/releases/20210718035204/public/assets/.sprockets-manifest-0bb9079559a609095b06de199423dd1f.json /home/deploy/myapp/releases/20210718035204/assets_manifest_backup
+    ✔ 02 deploy@3.34.94.252 0.095s
+00:32 deploy:migrate
+      [deploy:migrate] Run `rake db:migrate`
+00:32 deploy:migrating
+      01 $HOME/.rbenv/bin/rbenv exec bundle exec rake db:migrate
+    ✔ 01 deploy@3.34.94.252 1.776s
+00:33 deploy:symlink:release
+      01 ln -s /home/deploy/myapp/releases/20210718035204 /home/deploy/myapp/releases/current
+    ✔ 01 deploy@3.34.94.252 0.061s
+      02 mv /home/deploy/myapp/releases/current /home/deploy/myapp
+    ✔ 02 deploy@3.34.94.252 0.103s
+00:34 passenger:restart
+      01 passenger-config restart-app /home/deploy/myapp --ignore-app-not-running
+      01 Restarting /home/deploy/myapp/current (production)
+    ✔ 01 deploy@3.34.94.252 0.305s
+00:34 deploy:cleanup
+      Keeping 5 of 6 deployed releases on 3.34.94.252
+      01 rm -rf /home/deploy/myapp/releases/20210718031519
+    ✔ 01 deploy@3.34.94.252 1.479s
+00:36 deploy:log_revision
+      01 echo "Branch main (at 98814d694dbcf545b7799623f3d0f83207f0f125) deployed as release 20210718035204 by holy" >> /home/deploy/myapp/revisions.log
+    ✔ 01 deploy@3.34.94.252 0.097s
