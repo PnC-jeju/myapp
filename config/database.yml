@@ -2,21 +2,21 @@ default: &default
   adapter: mysql2
   encoding: utf8mb4
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: root
-  password:
-
 
 development:
   <<: *default
-  database: myapp_development
-
+  
+  database: myapp
+  username: holy
+  password: 1234
+  socket: /tmp/mysql.sock
 test:
   <<: *default
   database: myapp_test
 
 production:
   <<: *default
-  hostname: 13.125.158.130
+  #hostname: 13.125.158.130
   database: kwaterdb
   username: webuser01
   password: <%= ENV['MYAPP_DATABASE_PASSWORD'] %>
